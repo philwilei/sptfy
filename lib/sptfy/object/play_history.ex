@@ -17,10 +17,13 @@ defmodule Sptfy.Object.PlayHistory do
     fields =
       fields
       |> Helpers.atomize_keys()
-      |> Map.update(:context, nil, &Context.new/1)
+      |> Map.update(:context, nil, &build_context(&1))
       |> Map.update(:played_at, nil, &Helpers.parse_timestamp/1)
       |> Map.update(:track, nil, &SimplifiedTrack.new/1)
 
     struct(__MODULE__, fields)
   end
+
+  defp build_context(_field = nil), do: nil
+  defp build_context(field), do: Context.new(field)
 end

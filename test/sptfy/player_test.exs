@@ -210,6 +210,15 @@ defmodule Sptfy.PlayerTest do
       end
     end
 
+    test "context of tracks may be nil" do
+      json = Fixtures.cursor_paging(Fixtures.play_history_no_context())
+
+      with_mock Sptfy.Client.HTTP, get: fn _, "/v1/me/player/recently-played", _ -> MockHelpers.response(json) end do
+        assert {:ok, %CursorPaging{items: items}} = Player.get_recently_played("token")
+        assert Enum.all?(items, fn item -> item.context == nil end)
+      end
+    end
+
     test "returns Error struct on error" do
       json = %{"error" => %{"message" => "Oops", "status" => 401}}
 

@@ -256,6 +256,10 @@ defmodule Fixtures do
     }
   end
 
+  def play_history_no_context do
+    %{play_history() | "context" => nil}
+  end
+
   def full_playlist do
     %{
       "collaborative" => false,
